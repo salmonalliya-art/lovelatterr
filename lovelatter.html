@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surat Spesial Untuk Adenin</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-pastel: #FFF5F7;
+            --card-bg: #FFFFFF;
+            --pastel-pink: #FCD5CE;
+            --pastel-rose: #E8A598;
+            --pastel-accent: #D8E2DC;
+            --text-dark: #4A4E69;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--bg-pastel);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .card-box {
+            background: var(--card-bg);
+            border: 3px solid var(--pastel-pink);
+            border-radius: 28px;
+            padding: 35px 25px;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 12px 35px rgba(232, 165, 152, 0.2);
+            position: relative;
+            z-index: 10;
+        }
+
+        .question-text {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--pastel-rose);
+            margin-bottom: 25px;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .btn {
+            border: none;
+            padding: 12px 26px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .btn-mau {
+            background-color: var(--pastel-rose);
+            color: #FFFFFF;
+            box-shadow: 0 4px 14px rgba(232, 165, 152, 0.4);
+        }
+
+        .btn-mau:hover {
+            transform: scale(1.08);
+            background-color: #D38B7E;
+        }
+
+        .btn-malas {
+            background-color: var(--pastel-accent);
+            color: var(--text-dark);
+        }
+
+        .btn-malas:hover {
+            background-color: #C1CFC8;
+        }
+
+        #pundung-view {
+            display: none;
+        }
+
+        .pundung-text {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--pastel-rose);
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+
+        #envelope-view {
+            display: none;
+        }
+
+        .song-indicator {
+            font-size: 0.85rem;
+            color: var(--pastel-rose);
+            font-weight: 700;
+            margin-bottom: 18px;
+            background-color: #FFE5EC;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .envelope-wrapper {
+            position: relative;
+            width: 230px;
+            height: 155px;
+            background-color: var(--pastel-pink);
+            margin: 20px auto;
+            border-radius: 0 0 12px 12px;
+            cursor: pointer;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .envelope-wrapper:hover {
+            transform: scale(1.03);
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 115px solid transparent;
+            border-right: 115px solid transparent;
+            border-top: 90px solid var(--pastel-rose);
+            transform-origin: top;
+            transition: transform 0.5s ease;
+            z-index: 3;
+        }
+
+        .envelope-pocket {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 115px solid var(--pastel-pink);
+            border-right: 115px solid var(--pastel-pink);
+            border-bottom: 90px solid #F8C3B9;
+            border-radius: 0 0 12px 12px;
+            z-index: 2;
+        }
+
+        .envelope-click-hint {
+            font-size: 0.9rem;
+            color: var(--pastel-rose);
+            font-weight: 700;
+            margin-top: 10px;
+        }
+
+        .envelope-wrapper.open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        #letter-content-view {
+            display: none;
+            margin-top: 20px;
+            background-color: #FFF9FA;
+            border: 2px dashed var(--pastel-rose);
+            border-radius: 20px;
+            padding: 25px 20px;
+            text-align: left;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .letter-header {
+            font-family: 'Caveat', cursive;
+            font-size: 1.8rem;
+            color: var(--pastel-rose);
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .letter-body {
+            font-family: 'Caveat', cursive;
+            font-size: 1.45rem;
+            line-height: 1.6;
+            color: var(--text-dark);
+            white-space: pre-wrap;
+            margin-bottom: 20px;
+        }
+
+        .letter-footer {
+            font-family: 'Caveat', cursive;
+            font-size: 1.7rem;
+            text-align: right;
+            color: var(--pastel-rose);
+            font-weight: 700;
+        }
+
+        .custom-heart {
+            position: fixed;
+            width: 42px;
+            height: 42px;
+            user-select: none;
+            pointer-events: none;
+            z-index: 999;
+            animation: explodeAndFloat 3s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        .custom-heart svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.15));
+        }
+
+        @keyframes explodeAndFloat {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(0.3) rotate(0deg);
+            }
+            30% {
+                opacity: 1;
+                transform: translate(var(--tx), var(--ty)) scale(1.1) rotate(var(--rot));
+            }
+            100% {
+                opacity: 0;
+                transform: translate(calc(var(--tx) * 1.2), calc(var(--ty) - 150px)) scale(1) rotate(calc(var(--rot) + 45deg));
+            }
+        }
+
+        #youtube-player {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+            visibility: hidden;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card-box">
+        <!-- 1. Pertanyaan Awal -->
+        <div id="question-view">
+            <div class="question-text">hei, mau dibuka ga suratnya?</div>
+            <div class="btn-group">
+                <button class="btn btn-mau" onclick="chooseMau()">MAU DONG</button>
+                <button class="btn btn-malas" onclick="chooseMalas()">malas</button>
+            </div>
+        </div>
+
+        <!-- 2. Pilihan "malas" -->
+        <div id="pundung-view">
+            <div class="pundung-text">oke fine, pundung 😤</div>
+        </div>
+
+        <!-- 3. Pilihan "MAU DONG" (Amplop) -->
+        <div id="envelope-view">
+            <div class="song-indicator" onclick="toggleSong()">
+                <span id="music-icon">🎵</span> 
+                <span id="music-text">Playing: Daniel Caesar - Superpowers</span>
+            </div>
+            
+            <div class="envelope-wrapper" id="envelope" onclick="openLetter()">
+                <div class="envelope-flap"></div>
+                <div class="envelope-pocket"></div>
+            </div>
+            <div class="envelope-click-hint" id="hint-text">✨ Klik amplop untuk membuka surat ✨</div>
+
+            <!-- 4. Isi Surat Spesial -->
+            <div id="letter-content-view">
+                <div class="letter-header">helo Adenin Aesar Alkautsar</div>
+                <div class="letter-body">hai adenin aesar alkautsar, aku tiba tiba bikin ini buat kamu kwkwk sorry yaa, sorry juga kalo webnya jelek atau gimana heheh tapi ya aku bikin ini bingung isi suratnya mau apaan aih wkwkkwk, tapi oke laah , sumpa kamu kalo ada apa apa mah cerita aja lohh ke aku tapi bebas juga sih mau cerita apa engganyaa hehe, aklo mau cerita , cerita aja pasti aku dengerin kok , mau curhat aja silahkan nanti aku kasih jawaban atau saran terbaik (mungkin), oiya disisi lain juga sebaliknya kok, oiya aku tuh sebenernya gadibolehin pacaran sama ortu aku ntah kenapa but kalo mau hts atau gimana gimana yaudah lah, aku backstreet aaja asl janngan macem macem awawjiajwijwa itu aja weh pokonya, anw thanks ya</div>
+                <div class="letter-footer">from liyya</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Container Player YouTube -->
+    <div id="youtube-player"></div>
+
+    <script>
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+        var isPlaying = false;
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-player', {
+                height: '1',
+                width: '1',
+                videoId: 'bSe3xemu1LY',
+                playerVars: {
+                    'autoplay': 0,
+                    'controls': 0,
+                    'loop': 1,
+                    'playlist': 'bSe3xemu1LY',
+                    'playsinline': 1
+                },
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            event.target.setVolume(100);
+        }
+
+        function chooseMalas() {
+            document.getElementById('question-view').style.display = 'none';
+            document.getElementById('pundung-view').style.display = 'block';
+        }
+
+        function chooseMau() {
+            document.getElementById('question-view').style.display = 'none';
+            document.getElementById('envelope-view').style.display = 'block';
+            
+            // Memulai lagu
+            playAudio();
+        }
+
+        function playAudio() {
+            if (player && typeof player.playVideo === 'function') {
+                player.unMute();
+                player.playVideo();
+                isPlaying = true;
+            }
+        }
+
+        function toggleSong() {
+            if (!player) return;
+            if (isPlaying) {
+                player.pauseVideo();
+                document.getElementById('music-text').innerText = "Click to Play: Daniel Caesar - Superpowers";
+                document.getElementById('music-icon').innerText = "🔇";
+                isPlaying = false;
+            } else {
+                player.playVideo();
+                document.getElementById('music-text').innerText = "Playing: Daniel Caesar - Superpowers";
+                document.getElementById('music-icon').innerText = "🎵";
+                isPlaying = true;
+            }
+        }
+
+        function openLetter() {
+            const envelope = document.getElementById('envelope');
+            if (!envelope.classList.contains('open')) {
+                envelope.classList.add('open');
+                document.getElementById('hint-text').style.display = 'none';
+                
+                // Jika lagu belum jalan pas pencet "MAU DONG", jalan pas pencet amplop
+                if (!isPlaying) {
+                    playAudio();
+                }
+
+                createFullscreenHearts();
+
+                setTimeout(() => {
+                    document.getElementById('letter-content-view').style.display = 'block';
+                }, 400);
+            }
+        }
+
+        function createFullscreenHearts() {
+            const totalHearts = 70; 
+
+            for (let i = 0; i < totalHearts; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'custom-heart';
+                    
+                    heart.innerHTML = `
+                        <svg viewBox="0 0 24 24" fill="#FF2E4C" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                    `;
+                    
+                    heart.style.left = (window.innerWidth / 2 - 21) + 'px';
+                    heart.style.top = (window.innerHeight / 2 - 21) + 'px';
+                    
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = Math.random() * (Math.max(window.innerWidth, window.innerHeight) * 0.75);
+                    const tx = Math.cos(angle) * distance;
+                    const ty = Math.sin(angle) * distance;
+                    const rot = (Math.random() - 0.5) * 60;
+
+                    heart.style.setProperty('--tx', `${tx}px`);
+                    heart.style.setProperty('--ty', `${ty}px`);
+                    heart.style.setProperty('--rot', `${rot}deg`);
+                    
+                    document.body.appendChild(heart);
+
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 3000);
+                }, i * 25);
+            }
+        }
+    </script>
+</body>
+</html>
